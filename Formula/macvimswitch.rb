@@ -1,15 +1,15 @@
 class Macvimswitch < Formula
   desc "Automatic input source switcher for Mac"
   homepage "https://github.com/jackiexiao/macvimswitch"
-  version "1.0.0"
+  version "0.1.0"  # 将在 GitHub Actions 中替换
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-arm64.zip"
-      sha256 "d86a6c623f241cd3b6d038a58e8b42f2bb9a8eb2df5ebb1475ae5785672cce47"  # 将在 GitHub Actions 中计算并替换
+      sha256 "63215bc58a9f9bf4b309e01978da487f02ab8e25dcd9d8521a23b1332f1ac743"
     else
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-x86_64.zip"
-      sha256 "81da10f557a1110df7f679f1277d1a644df04b48818cca6b8a5f1bce98e03032"  # 将在 GitHub Actions 中计算并替换
+      sha256 "12e034c7979d0d610da1c692a185602117d5a0189ebc6f65a5cc2f006989538a"
     end
   end
 
