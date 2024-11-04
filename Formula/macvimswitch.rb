@@ -1,15 +1,15 @@
 class Macvimswitch < Formula
   desc "Automatic input source switcher for Mac"
   homepage "https://github.com/jackiexiao/macvimswitch"
-  version "0.2.0"  # 将在 GitHub Actions 中替换
+  version "0.2.1"  # 将在 GitHub Actions 中替换
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-arm64.zip"
-      sha256 "5c2cd9ae76ec68cdeabc305efe653517a0d7b60bb9842afa4261f037aa298d9a"
+      sha256 "686e322aefca95f3ed97308c00df1aaf2189984aa9e6c4449cd1d1e70ee63731"
     else
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-x86_64.zip"
-      sha256 "7c7e8e22df6a22a98e1d5f6f8b4ce3176b1be03edbe4d2716af5ca03ac39eaf3"
+      sha256 "681673ff312c7d72e0e2b6f4dccf23502c0f82ebc906e690d2d02f89d67466a7"
     end
   end
 
@@ -17,11 +17,23 @@ class Macvimswitch < Formula
 
   def install
     if OS.mac?
-      # 安装完整的 .app 包到 Applications 目录
-      prefix.install "MacVimSwitch.app"
+      unless Dir.exist?("dist/MacVimSwitch.app")
+        odie "MacVimSwitch.app not found in the expected location"
+      end
       
-      # 创建命令行工具的符号链接（可选）
-      bin.install_symlink prefix/"MacVimSwitch.app/Contents/MacOS/macvimswitch" => "macvimswitch"
+      prefix.install Dir["dist/MacVimSwitch.app"]
+      
+      app_path = prefix/"MacVimSwitch.app"
+      unless File.exist?(app_path)
+        odie "Failed to install MacVimSwitch.app"
+      end
+      
+      bin_path = app_path/"Contents/MacOS/macvimswitch"
+      unless File.exist?(bin_path)
+        odie "Executable not found in app bundle"
+      end
+      
+      bin.install_symlink bin_path => "macvimswitch"
     end
   end
 
@@ -55,5 +67,10 @@ class Macvimswitch < Formula
       Or use command line:
         pkill macvimswitch
     EOS
+  end
+
+  # 添加测试方法
+  test do
+    system "#{bin}/macvimswitch", "--version"
   end
 end 
