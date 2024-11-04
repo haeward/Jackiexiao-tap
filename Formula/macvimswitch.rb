@@ -1,15 +1,15 @@
 class Macvimswitch < Formula
   desc "Automatic input source switcher for Mac"
   homepage "https://github.com/jackiexiao/macvimswitch"
-  version "0.3.0"  # 将在 GitHub Actions 中替换
+  version "0.5.0"  # 将在 GitHub Actions 中替换
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-arm64.zip"
-      sha256 "93b882635da33d1fb703aca33be0913fe94432772078162bba8e2c514d4b7f7c"
+      sha256 "69746ffe94ca7f244b4661aea1c1ce41d4bd162a5a82c92bcd8aa7ad51ad6d09"
     else
       url "https://github.com/jackiexiao/macvimswitch/releases/download/v#{version}/MacVimSwitch-x86_64.zip"
-      sha256 "2473aac32e929f504f4b3287d1dd84ad0b7b79dc091d2131e492aa2dd76a0d84"
+      sha256 "1bfc75d7635d71c8ff68fbee68898ad0d24c99d919039abeee11ce2bea3a36cb"
     end
   end
 
@@ -17,8 +17,27 @@ class Macvimswitch < Formula
 
   def install
     if OS.mac?
+      # 解压 zip 文件
+      system "unzip", Dir["*.zip"].first
+      
+      # 输出解压后的内容
+      ohai "Contents after unzip:"
+      system "ls", "-la"
+      
+      # 添加调试信息
+      ohai "Current directory contents:"
+      system "ls", "-la"
+      
+      # 解压后验证文件结构
+      ohai "Zip contents:"
+      system "unzip", "-l", Dir["*.zip"].first
+      
       # 首先检查文件是否存在
       unless File.exist?("MacVimSwitch.app")
+        ohai "Directory contents after checking for app:"
+        system "ls", "-la"
+        ohai "Trying to find app recursively:"
+        system "find", ".", "-name", "MacVimSwitch.app"
         odie "MacVimSwitch.app not found in the downloaded package"
       end
       
